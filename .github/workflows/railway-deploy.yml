@@ -25,6 +25,9 @@ jobs:
           rm -f package-lock.json
           npm install
 
+      - name: Verify build script
+        run: npm run build --dry-run
+
       - name: Build project
         run: npm run build
 
