@@ -19,6 +19,7 @@ const gateway = new braintree.BraintreeGateway({
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static('build')); // Serve the build folder of the Svelte project
 
 // Endpoint to get client token
 app.get('/get-token', (req, res) => {
@@ -35,51 +36,73 @@ app.get('/get-token', (req, res) => {
 
 // Endpoint to process payment
 app.post('/process-payment', (req, res) => {
-	const { nonce, amount, cardholderName } = req.body;
+	const { nonce, amount, cardholderName, username } = req.body;
 
-	gateway.transaction.sale(
-		{
-			amount: amount,
-			paymentMethodNonce: nonce,
-			options: { submitForSettlement: true },
-			billing: {
-				name: cardholderName
+	// Validate username
+	const axios = require('axios');
+	const apiKey = 'eab1f319a942b1ffa9b0b23b709ecbc0'; // Replace with your actual API key
+	const userApiUrl = `https://igmorefollowers.com/adminapi/v2/users?username=${username}`;
+
+	axios
+		.get(userApiUrl, {
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Api-Key': apiKey
 			}
-		},
-		(err, result) => {
-			if (err) return res.status(500).send(err);
-			if (result.success) {
-				// Call the external API to add payment
-				const axios = require('axios');
-				const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
-				const apiUrl = 'https://igmorefollowers.com/adminapi/v2/payments/add';
-				const paymentData = {
-					username: 'john', // Replace with actual username
+		})
+		.then((userResponse) => {
+			if (userResponse.data.data.count === 0) {
+				return res.status(400).send({ error: 'Invalid username' });
+			}
+
+			// Proceed with payment if username is valid
+			gateway.transaction.sale(
+				{
 					amount: amount,
-					method: 'Perfect Money USD', // Replace with actual method
-					memo: 'added via Admin API',
-					affiliate_commission: true
-				};
-				axios
-					.post(apiUrl, paymentData, {
-						headers: {
-							'Content-Type': 'application/json',
-							'X-Api-Key': apiKey
-						}
-					})
-					.then((apiResponse) => {
-						console.log('Payment added successfully:', apiResponse.data);
-						res.send(result);
-					})
-					.catch((apiError) => {
-						console.error('Error adding payment:', apiError);
-						res.status(500).send({ error: 'Payment processed but failed to add payment to panel' });
-					});
-			} else {
-				res.status(500).send(result);
-			}
-		}
-	);
+					paymentMethodNonce: nonce,
+					options: { submitForSettlement: true },
+					billing: {
+						name: cardholderName
+					}
+				},
+				(err, result) => {
+					if (err) return res.status(500).send(err);
+					if (result.success) {
+						// Call the external API to add payment
+						const paymentData = {
+							username: username, // Use the validated username
+							amount: amount,
+							method: 'Perfect Money USD', // Replace with actual method
+							memo: 'added via Admin API',
+							affiliate_commission: true
+						};
+						axios
+							.post('https://igmorefollowers.com/adminapi/v2/payments/add', paymentData, {
+								headers: {
+									'Content-Type': 'application/json',
+									'X-Api-Key': apiKey
+								}
+							})
+							.then((apiResponse) => {
+								console.log('Payment added successfully:', apiResponse.data);
+								res.send(result);
+							})
+							.catch((apiError) => {
+								console.error('Error adding payment:', apiError);
+								res
+									.status(500)
+									.send({ error: 'Payment processed but failed to add payment to panel' });
+							});
+					} else {
+						res.status(500).send(result);
+					}
+				}
+			);
+		})
+		.catch((userError) => {
+			console.error('Error validating username:', userError);
+			res.status(500).send({ error: 'Failed to validate username' });
+		});
 });
 
 // Start the server
