@@ -10,22 +10,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20' # Change this to your required Node.js version
-
-      - name: Install dependencies
-        run: rm -rf node_modules
-          rm -f package-lock.json
-          npm install
-
-      - name: Build project
-        run: npm run build
-
-      - name: Run server
-        run: npm run start
+          - name: Set up Node.js
+            uses: actions/setup-node@v3
+            with:
+              node-version: '20' # Change this to your required Node.js version
+    
+          - name: Change to project directory
+            run: cd /
+    
+          - name: Install dependencies
+            run: |
+              rm -rf node_modules
+              rm -f package-lock.json
+              npm install
+    
+          - name: Build project
+            run: npm run build
+    
+          - name: Run server
+            run: npm run start
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
