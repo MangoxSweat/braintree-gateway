@@ -22,16 +22,14 @@ jobs:
       - name: Install dependencies
         run: |
           rm -rf node_modules
-          rm -f package-lock.json
+          if [ -f package-lock.json ]; then
+              rm -f package-lock.json
+          fi
           npm ci
 
       - name: Build project
         run: |
           npm run build
-
-      - name: Start server
-        run: |
-          node server.js
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
@@ -40,4 +38,4 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }} # Ensure this is set in GitHub Secrets
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }} # Optional: Set if you have a specific project
-        run: railway up --detach --service wholesome-radiance
+        run: railway up --detach --service wholesome-radiance --entry server.js
