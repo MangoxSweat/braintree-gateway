@@ -17,16 +17,21 @@ jobs:
           node-version: '20' # Change this to your required Node.js version
 
       - name: Checkout code
-        uses: actions/checkout@v2 # Ensure the code is checked out before running commands
+        uses: actions/checkout@v3 # Ensure the code is checked out before running commands
 
       - name: Install dependencies
         run: |
           rm -rf node_modules
           rm -f package-lock.json
-          npm install
+          npm ci
 
       - name: Build project
-        run: npm run build
+        run: |
+          npm run build
+
+      - name: Start server
+        run: |
+          node server.js
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
