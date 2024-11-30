@@ -139,9 +139,11 @@
 	<label for="card-number">Card Number</label>
 	<input type="text" id="card-number" placeholder="4111111111111111" />
 
+	<br />
 	<label for="cvv">CVV</label>
 	<input id="cvv" type="text" placeholder="CVV" />
 
+	<br />
 	<label for="expiration-date">Expiration Date</label>
 	<input type="text" id="expiration-date" placeholder="MM / YY" />
 
@@ -163,7 +165,7 @@
 		margin-bottom: 20px;
 		border-radius: 4px;
 		padding: 10px;
-		width: 100%;
+		width: 85%;
 		font-size: 16px;
 	}
 
