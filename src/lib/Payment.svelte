@@ -157,15 +157,11 @@
 {/if}
 
 <style>
-	form div {
-		border: none;
-	}
 	#card-number,
 	#cvv,
 	#expiration-date {
 		margin-bottom: 20px;
 		border-radius: 4px;
-		border: 1px solid #ccc;
 		padding: 10px;
 		width: 100%;
 		font-size: 16px;
