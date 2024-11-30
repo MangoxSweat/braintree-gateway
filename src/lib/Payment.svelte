@@ -157,6 +157,9 @@
 {/if}
 
 <style>
+	form div {
+		border: none;
+	}
 	#card-number,
 	#cvv,
 	#expiration-date {
