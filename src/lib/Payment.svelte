@@ -188,7 +188,7 @@
 
 	/* Input styles */
 	input {
-		width: 100%; /* Full width */
+		width: 85%; /* Full width */
 		padding: 10px; /* Padding for input */
 		font-size: 16px; /* Font size */
 		border: 1px solid #ccc; /* Default border color */
