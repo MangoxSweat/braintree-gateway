@@ -140,7 +140,7 @@
 	<input type="text" id="card-number" placeholder="4111111111111111" />
 
 	<br />
-	<label for="cvv">CVV</label>
+	<label style="display:block;" for="cvv">CVV</label>
 	<input id="cvv" type="text" placeholder="CVV" />
 
 	<br />
