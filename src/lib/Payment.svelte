@@ -137,13 +137,13 @@
 	<br />
 	<br />
 	<label for="card-number">Card Number</label>
-	<div id="card-number"><input type="text" placeholder="4111111111111111" /></div>
+	<input type="text" id="card-number" placeholder="4111111111111111" />
 
 	<label for="cvv">CVV</label>
-	<div id="cvv"><input type="text" placeholder="CVV" /></div>
+	<input id="cvv" type="text" placeholder="CVV" />
 
 	<label for="expiration-date">Expiration Date</label>
-	<div id="expiration-date"><input type="text" placeholder="MM / YY" /></div>
+	<input type="text" id="expiration-date" placeholder="MM / YY" />
 
 	<button type="submit">Pay</button>
 </form>
