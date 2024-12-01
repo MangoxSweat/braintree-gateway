@@ -106,6 +106,7 @@
 					successMessage = '';
 				});
 		});
+
 	const formatExpirationDate = (event) => {
 		let input = event.target.value.replace(/\D/g, '');
 		if (input.length > 2) {
@@ -113,6 +114,7 @@
 		}
 		event.target.value = input;
 	};
+
 </script>
 
 <svelte:head>
@@ -149,10 +151,9 @@
 	<input type="text" id="expiration-date" placeholder="MM / YY" on:input={formatExpirationDate} />
 	<label style="display:block;" for="cvv">CVV</label>
 	<input id="cvv" type="text" placeholder="CVV" />
-
 	<br />
 	<label for="expiration-date">Expiration Date</label>
-	<input type="text" id="expiration-date" placeholder="MM / YY" />
+	<input type="text" id="expiration-date" placeholder="MM / YY" on:input={formatExpirationDate} />
 
 	<button type="submit">Pay</button>
 </form>
