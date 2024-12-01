@@ -86,34 +86,34 @@
 			errorMessage = 'Please correct the errors in the form.';
 			return;
 		}
-	};
 
-	hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
-		if (tokenizeErr) {
-			errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
-			return;
-		}
+		hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
+			if (tokenizeErr) {
+				errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
+				return;
+			}
 
-		// Send nonce to your server for processing
-		axios
-			.post('http://localhost:3000/process-payment', {
-				nonce: payload.nonce,
-				amount: amount
-			})
-			.then((response) => {
-				if (response.data.success) {
-					successMessage = 'Payment successful! Transaction ID: ' + response.data.transaction.id;
-					errorMessage = '';
-				} else {
-					errorMessage = 'Payment failed: ' + response.data.message;
+			// Send nonce to your server for processing
+			axios
+				.post('http://localhost:3000/process-payment', {
+					nonce: payload.nonce,
+					amount: amount
+				})
+				.then((response) => {
+					if (response.data.success) {
+						successMessage = 'Payment successful! Transaction ID: ' + response.data.transaction.id;
+						errorMessage = '';
+					} else {
+						errorMessage = 'Payment failed: ' + response.data.message;
+						successMessage = '';
+					}
+				})
+				.catch((err) => {
+					errorMessage = 'Error processing payment: ' + err.message;
 					successMessage = '';
-				}
-			})
-			.catch((err) => {
-				errorMessage = 'Error processing payment: ' + err.message;
-				successMessage = '';
-			});
-	});
+				});
+		});
+	};
 
 	const validateInputs = () => {
 		let isValid = true;
