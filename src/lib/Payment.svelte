@@ -106,6 +106,12 @@
 					successMessage = '';
 				});
 		});
+	const formatExpirationDate = (event) => {
+		let input = event.target.value.replace(/\D/g, '');
+		if (input.length > 2) {
+			input = input.slice(0, 2) + ' / ' + input.slice(2, 4);
+		}
+		event.target.value = input;
 	};
 </script>
 
@@ -140,6 +146,7 @@
 	<input type="text" id="card-number" placeholder="4111111111111111" />
 
 	<br />
+	<input type="text" id="expiration-date" placeholder="MM / YY" on:input={formatExpirationDate} />
 	<label style="display:block;" for="cvv">CVV</label>
 	<input id="cvv" type="text" placeholder="CVV" />
 
