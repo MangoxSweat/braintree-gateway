@@ -173,7 +173,7 @@
 
 	<br />
 	<label style="display:block;" for="cvv">CVV</label>
-	<input id="cvv" type="text" placeholder="CVV" required />
+	<input id="cvv" type="text" placeholder="CVV" maxlength="4" required />
 	<br />
 	<label for="expiration-date">Expiration Date</label>
 	<input
