@@ -79,46 +79,45 @@
 
 	const handlePayment = (event) => {
 		event.preventDefault(); // Prevent default form submission
-	
+
 		console.log('Form Values:', { username, amount, cardholderName });
-	
+
 		if (!validateInputs()) {
 			errorMessage = 'Please correct the errors in the form.';
 			return;
 		}
 	};
 
-		hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
-			if (tokenizeErr) {
-				errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
-				return;
-			}
+	hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
+		if (tokenizeErr) {
+			errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
+			return;
+		}
 
-			// Send nonce to your server for processing
-			axios
-				.post('http://localhost:3000/process-payment', {
-					nonce: payload.nonce,
-					amount: amount
-				})
-				.then((response) => {
-					if (response.data.success) {
-						successMessage = 'Payment successful! Transaction ID: ' + response.data.transaction.id;
-						errorMessage = '';
-					} else {
-						errorMessage = 'Payment failed: ' + response.data.message;
-						successMessage = '';
-					}
-				})
-				.catch((err) => {
-					errorMessage = 'Error processing payment: ' + err.message;
+		// Send nonce to your server for processing
+		axios
+			.post('http://localhost:3000/process-payment', {
+				nonce: payload.nonce,
+				amount: amount
+			})
+			.then((response) => {
+				if (response.data.success) {
+					successMessage = 'Payment successful! Transaction ID: ' + response.data.transaction.id;
+					errorMessage = '';
+				} else {
+					errorMessage = 'Payment failed: ' + response.data.message;
 					successMessage = '';
-				});
-		});
-	};
+				}
+			})
+			.catch((err) => {
+				errorMessage = 'Error processing payment: ' + err.message;
+				successMessage = '';
+			});
+	});
 
 	const validateInputs = () => {
 		let isValid = true;
-	
+
 		// Validate CVV
 		const cvvInput = document.getElementById('cvv');
 		if (!/^\d{3,4}$/.test(cvvInput.value)) {
@@ -128,13 +127,12 @@
 			cvvInput.classList.remove('invalid');
 			cvvInput.classList.add('valid');
 		}
-	
+
 		// Validate other inputs (e.g., card number, expiration date)
 		// Add similar validation checks for other inputs as needed
-	
+
 		console.log('Validation Status:', isValid);
 		return isValid;
-	};
 	};
 
 	const formatExpirationDate = (event) => {
