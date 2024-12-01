@@ -80,6 +80,11 @@
 	const handlePayment = (event) => {
 		event.preventDefault(); // Prevent default form submission
 
+		if (!validateInputs()) {
+			errorMessage = 'Please correct the errors in the form.';
+			return;
+		}
+
 		hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
 			if (tokenizeErr) {
 				errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
@@ -106,6 +111,26 @@
 					successMessage = '';
 				});
 		});
+	};
+
+	const validateInputs = () => {
+		let isValid = true;
+
+		// Validate CVV
+		const cvvInput = document.getElementById('cvv');
+		if (!/^\d{3,4}$/.test(cvvInput.value)) {
+			cvvInput.classList.add('invalid');
+			isValid = false;
+		} else {
+			cvvInput.classList.remove('invalid');
+			cvvInput.classList.add('valid');
+		}
+
+		// Validate other inputs (e.g., card number, expiration date)
+		// Add similar validation checks for other inputs as needed
+
+		return isValid;
+	};
 
 	const formatExpirationDate = (event) => {
 		let input = event.target.value.replace(/\D/g, '');
@@ -114,7 +139,6 @@
 		}
 		event.target.value = input;
 	};
-
 </script>
 
 <svelte:head>
@@ -148,12 +172,17 @@
 	<input type="text" id="card-number" placeholder="4111111111111111" />
 
 	<br />
-	<input type="text" id="expiration-date" placeholder="MM / YY" on:input={formatExpirationDate} />
 	<label style="display:block;" for="cvv">CVV</label>
-	<input id="cvv" type="text" placeholder="CVV" />
+	<input id="cvv" type="text" placeholder="CVV" required />
 	<br />
 	<label for="expiration-date">Expiration Date</label>
-	<input type="text" id="expiration-date" placeholder="MM / YY" on:input={formatExpirationDate} />
+	<input
+		type="text"
+		id="expiration-date"
+		placeholder="MM / YY"
+		on:input={formatExpirationDate}
+		required
+	/>
 
 	<button type="submit">Pay</button>
 </form>
