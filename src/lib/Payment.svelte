@@ -35,39 +35,40 @@
 						{
 							client: clientInstance,
 							styles: {
-								input: {
-									'font-size': '14px',
-									color: '#333',
-									'font-family': 'Arial, sans-serif',
-									padding: '10px',
-									border: '1px solid #ccc',
-									'border-radius': '4px',
-
-									height: '20px' // Set the height to match input fields
+								styles: {
+									input: {
+										'font-size': '14px',
+										color: '#333',
+										'font-family': 'Arial, sans-serif',
+										padding: '5px', // Adjust padding to reduce height
+										border: '1px solid #ccc',
+										'border-radius': '4px',
+										height: '30px' // Adjust height to make input fields less tall
+									},
+									'.valid': {
+										color: 'green'
+									},
+									'.invalid': {
+										color: 'red'
+									}
 								},
-								'.valid': {
-									color: 'green'
-								},
-								'.invalid': {
-									color: 'red'
-								}
-							},
-							fields: {
-								number: {
-									selector: '#card-number',
-									placeholder: '4211 1111 1111 1111'
-								},
-								cvv: {
-									selector: '#cvv',
-									placeholder: '123'
-								},
-								expirationDate: {
-									selector: '#expiration-date',
-									placeholder: 'MM / YY'
-								},
-								postalCode: {
-									selector: '#postal-code',
-									placeholder: '11111'
+								fields: {
+									number: {
+										selector: '#card-number',
+										placeholder: '4211 1111 1111 1111'
+									},
+									cvv: {
+										selector: '#cvv',
+										placeholder: '123'
+									},
+									expirationDate: {
+										selector: '#expiration-date',
+										placeholder: 'MM / YY'
+									},
+									postalCode: {
+										selector: '#postal-code',
+										placeholder: '11111'
+									}
 								}
 							}
 						},
