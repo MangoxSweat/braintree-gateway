@@ -30,6 +30,7 @@ app.get('/get-token', (req, res) => {
 			console.error('Error generating client token:', err);
 			return res.status(500).send({ error: err.message });
 		}
+		console.log('generate token: ', response.clientToken);
 		res.send({ clientToken: response.clientToken });
 	});
 });
@@ -57,6 +58,7 @@ app.post('/process-payment', (req, res) => {
 				return res.status(500).send({ error: err.message });
 			}
 			if (result.success) {
+				//console.log('Payment successful:', result);
 				console.log('Payment successful:');
 				res.send(result);
 			} else {

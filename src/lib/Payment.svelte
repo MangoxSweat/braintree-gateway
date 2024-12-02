@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import axios from 'axios';
+	import braintree from 'braintree-web';
 
 	let hostedFieldsInstance;
 	let errorMessage = '';
@@ -8,9 +9,8 @@
 	let amount = '10.00';
 	let username = '';
 	let cardholderName = '';
-	let cvv = '';
 	let exp = '';
-	let cardholderNumber = '';
+	let cardholderNumber = ''; // This variable is defined but not used
 
 	onMount(() => {
 		// Fetch client token from your server
@@ -175,7 +175,7 @@
 			input = input.slice(0, 2) + ' / ' + input.slice(2, 4);
 		}
 		event.target.value = input;
-	};
+	}; // This function is defined but not used
 </script>
 
 <svelte:head>
@@ -192,7 +192,7 @@
 	<label for="amount">Amount</label><br />
 	<input
 		id="amount"
-		type="text"
+		type="number"
 		bind:value={amount}
 		placeholder="$10.00"
 		on:input={(e) => (e.target.value = e.target.value.replace(/[^\d.]/g, ''))}
