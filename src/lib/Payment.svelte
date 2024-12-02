@@ -8,6 +8,9 @@
 	let amount = '10.00';
 	let username = '';
 	let cardholderName = '';
+	let cvv = '';
+	let exp = '';
+	let cardholderNumber = '';
 
 	onMount(() => {
 		// Fetch client token from your server
@@ -33,12 +36,14 @@
 							client: clientInstance,
 							styles: {
 								input: {
-									'font-size': '16px',
+									'font-size': '14px',
 									color: '#333',
 									'font-family': 'Arial, sans-serif',
 									padding: '10px',
 									border: '1px solid #ccc',
-									'border-radius': '4px'
+									'border-radius': '4px',
+
+									height: '20px' // Set the height to match input fields
 								},
 								'.valid': {
 									color: 'green'
@@ -50,7 +55,7 @@
 							fields: {
 								number: {
 									selector: '#card-number',
-									placeholder: '4111 1111 1111 1111'
+									placeholder: '4211 1111 1111 1111'
 								},
 								cvv: {
 									selector: '#cvv',
@@ -59,6 +64,10 @@
 								expirationDate: {
 									selector: '#expiration-date',
 									placeholder: 'MM / YY'
+								},
+								postalCode: {
+									selector: '#postal-code',
+									placeholder: '11111'
 								}
 							}
 						},
@@ -80,7 +89,7 @@
 	const handlePayment = (event) => {
 		event.preventDefault(); // Prevent default form submission
 
-		console.log('Form Values:', { username, amount, cardholderName });
+		console.log('Form Values:', { username, amount, cardholderName, cardholderNumber, cvv, exp });
 
 		if (!validateInputs()) {
 			errorMessage = 'Please correct the errors in the form.';
@@ -88,6 +97,8 @@
 		}
 
 		hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
+			console.log('Tokenize Error:', tokenizeErr); // Log any errors from tokenize
+			console.log('Tokenized Payload:', payload); // Log the payload for debugging
 			if (tokenizeErr) {
 				errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
 				return;
@@ -97,7 +108,9 @@
 			axios
 				.post('http://localhost:3000/process-payment', {
 					nonce: payload.nonce,
-					amount: amount
+					amount: parseFloat(amount),
+					cardholderName: cardholderName,
+					username: username
 				})
 				.then((response) => {
 					if (response.data.success) {
@@ -118,18 +131,39 @@
 	const validateInputs = () => {
 		let isValid = true;
 
-		// Validate CVV
-		const cvvInput = document.getElementById('cvv');
-		if (!/^\d{3,4}$/.test(cvvInput.value)) {
-			cvvInput.classList.add('invalid');
+		// Validate amount
+		const amountInput = document.getElementById('amount');
+		if (
+			!/^\d+(\.\d{1,2})?$/.test(amountInput.value) ||
+			parseFloat(amountInput.value) <= 0 ||
+			parseFloat(amountInput.value) > 10000
+		) {
+			amountInput.classList.add('invalid');
 			isValid = false;
 		} else {
-			cvvInput.classList.remove('invalid');
-			cvvInput.classList.add('valid');
+			amountInput.classList.remove('invalid');
+			amountInput.classList.add('valid');
 		}
 
-		// Validate other inputs (e.g., card number, expiration date)
-		// Add similar validation checks for other inputs as needed
+		// Validate cardholder name
+		const cardholderNameInput = document.getElementById('cardholder-name');
+		if (cardholderNameInput.value.trim() === '') {
+			cardholderNameInput.classList.add('invalid');
+			isValid = false;
+		} else {
+			cardholderNameInput.classList.remove('invalid');
+			cardholderNameInput.classList.add('valid');
+		}
+
+		// Validate username
+		const usernameInput = document.getElementById('username');
+		if (usernameInput.value.trim() === '') {
+			usernameInput.classList.add('invalid');
+			isValid = false;
+		} else {
+			usernameInput.classList.remove('invalid');
+			usernameInput.classList.add('valid');
+		}
 
 		console.log('Validation Status:', isValid);
 		return isValid;
@@ -149,45 +183,43 @@
 	<script src="https://js.braintreegateway.com/web/3.97.3/js/hosted-fields.min.js"></script>
 </svelte:head>
 
-<form id="payment-form" on:submit={handlePayment}>
-	<label for="username">Username</label>
-	<input type="text" id="username" bind:value={username} placeholder="Username" required />
+<form id="hosted-fields-form" method="post" on:submit={handlePayment}>
+	<label for="username">Username</label><br />
+	<input id="username" type="text" bind:value={username} placeholder="Username" />
+	<br />
+	<br />
 
-	<br />
-	<br />
-	<label for="amount">Amount</label>
-	<input type="text" id="amount" bind:value={amount} placeholder="10.00" required />
-
-	<br />
-	<br />
-	<label for="cardholder-name">Cardholder Name</label>
+	<label for="amount">Amount</label><br />
 	<input
+		id="amount"
 		type="text"
-		id="cardholder-name"
-		bind:value={cardholderName}
-		placeholder="John Doe"
-		required
+		bind:value={amount}
+		placeholder="10.00"
+		on:input={(e) => (e.target.value = e.target.value.replace(/[^\d.]/g, ''))}
 	/>
+
+	<br />
+	<br />
+	<label for="cardholder-name">Cardholder Name</label><br />
+	<input id="cardholder-name" type="text" bind:value={cardholderName} placeholder="Card Holder" />
 
 	<br />
 	<br />
 	<label for="card-number">Card Number</label>
-	<input type="text" id="card-number" placeholder="4111111111111111" />
+	<div id="card-number"></div>
 
-	<br />
-	<label style="display:block;" for="cvv">CVV</label>
-	<input id="cvv" type="text" placeholder="CVV" maxlength="4" required />
-	<br />
+	<label for="cvv">CVV</label>
+	<div id="cvv"></div>
+
 	<label for="expiration-date">Expiration Date</label>
-	<input
-		type="text"
-		id="expiration-date"
-		placeholder="MM / YY"
-		on:input={formatExpirationDate}
-		required
-	/>
+	<div id="expiration-date"></div>
 
-	<button type="submit">Pay</button>
+	<label for="postal-code">Postal Code</label>
+	<div id="postal-code"></div>
+
+	<div id="checkout-message"></div>
+
+	<input id="payment-button" type="submit" value="Pay" />
 </form>
 
 {#if errorMessage}
@@ -201,7 +233,8 @@
 <style>
 	#card-number,
 	#cvv,
-	#expiration-date {
+	#expiration-date,
+	#postal-code {
 		margin-bottom: 20px;
 		border-radius: 4px;
 		padding: 10px;
@@ -210,14 +243,26 @@
 	}
 
 	/* General form styles */
-	#payment-form {
-		max-width: 400px; /* Set a max width for the form */
+	#hosted-fields-form {
+		width: 33.33%; /* One third of the screen for desktops */
 		margin: 0 auto; /* Center the form */
 		padding: 20px;
 		border: 1px solid #ccc;
 		border-radius: 8px;
 		background-color: #f9f9f9; /* Light background color */
 		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+	}
+
+	@media (max-width: 768px) {
+		#hosted-fields-form {
+			width: 80%; /* 80% of the screen for small screens */
+		}
+	}
+
+	@media (max-width: 480px) {
+		#hosted-fields-form {
+			width: 100%; /* 100% of the screen for very small devices */
+		}
 	}
 
 	/* Styles for each hosted field container */
@@ -235,6 +280,7 @@
 		border: 1px solid #ccc; /* Default border color */
 		border-radius: 4px; /* Rounded corners */
 		transition: border-color 0.3s ease; /* Smooth transition for border color */
+		height: 40px;
 	}
 
 	/* Focus state styles */
@@ -243,39 +289,8 @@
 		outline: none; /* Remove default outline */
 	}
 
-	/* Valid state styles (for valid inputs) */
-	.valid {
-		border-color: green; /* Green border for valid inputs */
-	}
-
-	/* Invalid state styles (for invalid inputs) */
-	.invalid {
-		border-color: red; /* Red border for invalid inputs */
-	}
-
-	/* Button styles */
-	button {
-		width: 100%; /* Full width button */
-		padding: 10px;
-		background-color: #007bff; /* Primary button color */
-		color: white; /* Text color */
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-		font-size: 16px;
-	}
-
-	button:hover {
-		background-color: #0056b3; /* Darker shade on hover */
-	}
-
-	input,
-	button {
-		transition: all 0.3s ease-in-out;
-	}
-
-	input:hover,
-	button:hover {
-		transform: scale(1.02); /* Slightly enlarge on hover */
+	form {
+		width: 70%;
+		margin: auto;
 	}
 </style>
