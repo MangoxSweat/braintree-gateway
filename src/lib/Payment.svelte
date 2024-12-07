@@ -26,6 +26,7 @@
 				// Create a Braintree client
 				braintree.client.create({ authorization: token }, (clientErr, clientInstance) => {
 					if (clientErr) {
+						console.log('client error');
 						console.error(clientErr);
 						return;
 					}
