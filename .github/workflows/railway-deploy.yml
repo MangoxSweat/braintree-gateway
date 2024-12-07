@@ -29,7 +29,6 @@ jobs:
 
       - name: Build project
         run: |
-          npm run build
           node server.js &
 
       - name: Install Railway CLI
