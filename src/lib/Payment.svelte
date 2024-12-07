@@ -41,11 +41,12 @@
 									'font-size': '14px',
 									color: '#333',
 									'font-family': 'Arial, sans-serif',
-									padding: '10px',
+									padding: '10px'
+								},
+								'.number': {
 									border: '1px solid #ccc',
 									'border-radius': '4px',
-
-									height: '20px' // Set the height to match input fields
+									'background-color': 'white'
 								},
 								'.valid': {
 									color: 'green'
@@ -273,7 +274,7 @@
 
 	/* Input styles */
 	input {
-		width: 85%; /* Full width */
+		width: 92%;
 		padding: 10px; /* Padding for input */
 		font-size: 16px; /* Font size */
 		border: 1px solid #ccc; /* Default border color */
@@ -291,5 +292,25 @@
 	form {
 		width: 70%;
 		margin: auto;
+	}
+
+	div#card-number,
+	div#cvv,
+	div#expiration-date,
+	div#postal-code {
+		height: 40px;
+	}
+
+	#card-number,
+	#cvv,
+	#expiration-date,
+	#postal-code {
+		width: 92%;
+		background-color: white;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+	}
+	#payment-button {
+		width: 98%;
 	}
 </style>

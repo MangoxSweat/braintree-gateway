@@ -71,7 +71,7 @@ app.post('/process-payment', (req, res) => {
 	gateway.transaction.sale(
 		{
 			amount: amount.toString(),
-			paymentMethodNonce: 'fake-valid-nonce',
+			paymentMethodNonce: nonce,
 			options: { submitForSettlement: true },
 			billing: {
 				firstName: cardholderName
