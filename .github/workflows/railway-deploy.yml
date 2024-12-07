@@ -28,8 +28,7 @@ jobs:
           npm install
 
       - name: Build project
-        run: |
-          node server.js &
+        run: npm run build
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli

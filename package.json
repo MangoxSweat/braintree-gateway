@@ -3,10 +3,9 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"build": "vite build",
 		"dev": "vite dev",
 		"start": "node build",
-		"build": "node build",
+		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
@@ -17,7 +16,6 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.45.3",
-		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"eslint": "^9.7.0",
