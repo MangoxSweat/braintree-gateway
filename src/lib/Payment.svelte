@@ -22,6 +22,7 @@
 					console.error('Client token is missing from the response');
 					return;
 				}
+				console.log('got token');
 
 				// Create a Braintree client
 				braintree.client.create({ authorization: token }, (clientErr, clientInstance) => {
@@ -90,16 +91,13 @@
 	const handlePayment = (event) => {
 		event.preventDefault(); // Prevent default form submission
 
-		console.log('Form Values:', { username, amount, cardholderName, cardholderNumber, cvv, exp });
-
 		if (!validateInputs()) {
 			errorMessage = 'Please correct the errors in the form.';
 			return;
 		}
 
 		hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
-			console.log('Tokenize Error:', tokenizeErr); // Log any errors from tokenize
-			console.log('Tokenized Payload:', payload); // Log the payload for debugging
+			console.log('Form Values:', { username, amount, cardholderName, cardholderNumber, cvv, exp });
 			if (tokenizeErr) {
 				errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
 				return;

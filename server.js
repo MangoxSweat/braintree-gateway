@@ -55,7 +55,7 @@ app.get('/get-token', (req, res) => {
 			console.error('Error generating client token:', err);
 			return res.status(500).send({ error: err.message });
 		}
-		console.log('generated token: ');
+		console.log('generated token at', new Date().toISOString(), ':');
 		res.send({ clientToken: response.clientToken });
 	});
 });
