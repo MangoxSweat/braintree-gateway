@@ -9,28 +9,26 @@
 	let amount = '10.00';
 	let username = '';
 	let cardholderName = '';
-	let exp = '';
-	let cardholderNumber = ''; // This variable is defined but not used
 
 	onMount(() => {
 		// Fetch client token from your server
+		console.log('onmount payment component');
 		axios
-			.get('http://localhost:3000/get-token')
+			.get('/api/braintree/get-token')
 			.then((response) => {
 				const token = response.data.clientToken;
 				if (!token) {
 					console.error('Client token is missing from the response');
 					return;
 				}
-				console.log('got token');
 
 				// Create a Braintree client
 				braintree.client.create({ authorization: token }, (clientErr, clientInstance) => {
 					if (clientErr) {
-						console.log('client error');
-						console.error(clientErr);
+						console.error('Error creating Braintree client:', clientErr);
 						return;
 					}
+					console.log('Braintree client created successfully');
 
 					// Create Hosted Fields
 					braintree.hostedFields.create(
@@ -76,10 +74,12 @@
 						},
 						(hostedFieldsErr, instance) => {
 							if (hostedFieldsErr) {
-								console.error(hostedFieldsErr);
+								console.error('Error creating Hosted Fields:', hostedFieldsErr);
 								return;
 							}
+							console.log('Hosted Fields created successfully');
 							hostedFieldsInstance = instance;
+							console.log('hosted fields instance', hostedFieldsInstance);
 						}
 					);
 				});
@@ -98,7 +98,6 @@
 		}
 
 		hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
-			console.log('Form Values:', { username, amount, cardholderName, cardholderNumber, cvv, exp });
 			if (tokenizeErr) {
 				errorMessage = 'Error requesting payment method: ' + tokenizeErr.message;
 				return;
@@ -106,23 +105,29 @@
 
 			// Send nonce to your server for processing
 			axios
-				.post('http://localhost:3000/process-payment', {
-					nonce: payload.nonce,
+				.post('/api/braintree/process-payment', {
 					amount: parseFloat(amount),
 					cardholderName: cardholderName,
-					username: username
+					username: username,
+					nonce: payload.nonce
 				})
 				.then((response) => {
 					if (response.data.success) {
-						successMessage = 'Payment successful! Transaction ID: ' + response.data.transaction.id;
+						successMessage =
+							'Payment successful! Transaction ID: ' + response.data.result.transaction.id;
 						errorMessage = '';
 					} else {
-						errorMessage = 'Payment failed: ' + response.data.message;
+						errorMessage = 'Payment failed: ' + response.data.result;
 						successMessage = '';
 					}
 				})
 				.catch((err) => {
-					errorMessage = 'Error processing payment: ' + err.message;
+					if (!err.response.data.result.success) {
+						errorMessage =
+							'Error processing payment: ' + err.response.data.result.transaction.status;
+					} else {
+						errorMessage = 'Error processing payment: ' + err.message;
+					}
 					successMessage = '';
 				});
 		});
@@ -153,16 +158,6 @@
 		} else {
 			cardholderNameInput.classList.remove('invalid');
 			cardholderNameInput.classList.add('valid');
-		}
-
-		// Validate username
-		const usernameInput = document.getElementById('username');
-		if (usernameInput.value.trim() === '') {
-			usernameInput.classList.add('invalid');
-			isValid = false;
-		} else {
-			usernameInput.classList.remove('invalid');
-			usernameInput.classList.add('valid');
 		}
 
 		console.log('Validation Status:', isValid);
@@ -223,14 +218,20 @@
 </form>
 
 {#if errorMessage}
-	<p style="color: red;">{errorMessage}</p>
+	<p class="result-message" style="color: red;">{errorMessage}</p>
 {/if}
 
 {#if successMessage}
-	<p style="color: green;">{successMessage}</p>
+	<p class="result-message" style="color: green;">{successMessage}</p>
 {/if}
 
 <style>
+	.result-message {
+		margin: auto;
+		width: 50%;
+		text-align: center;
+	}
+
 	#card-number,
 	#cvv,
 	#expiration-date,

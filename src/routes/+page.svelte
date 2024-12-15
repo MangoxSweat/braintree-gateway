@@ -1,10 +1,14 @@
 <script>
-	import Payment from '$lib/Payment.svelte';
+	import BraintreeFields from '$lib/components/BraintreeFields.svelte';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		console.log('page onmount');
+	});
 </script>
 
 <main>
-	<h1>Braintree Payment Integration</h1>
-	<Payment />
+	<h1>Pay Here!</h1>
+	<BraintreeFields />
 </main>
 
 <style>

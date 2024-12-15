@@ -37,6 +37,7 @@
 		"braintree-web": "^3.112.1",
 		"cors": "^2.8.5",
 		"dotenv": "^16.4.5",
-		"express": "^4.21.1"
+		"express": "^4.21.1",
+		"flatted": "^3.3.2"
 	}
 }
