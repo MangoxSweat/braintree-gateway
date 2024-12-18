@@ -122,11 +122,16 @@
 					}
 				})
 				.catch((err) => {
-					if (!err.response.data.result.success) {
+					if (
+						!err.response ||
+						!err.response.data ||
+						!err.response.data.result ||
+						!err.response.data.result.success
+					) {
+						errorMessage = 'Error processing payment: ' + err.message;
+					} else {
 						errorMessage =
 							'Error processing payment: ' + err.response.data.result.transaction.status;
-					} else {
-						errorMessage = 'Error processing payment: ' + err.message;
 					}
 					successMessage = '';
 				});
@@ -185,13 +190,13 @@
 	<br />
 
 	<label for="amount">Amount</label><br />
-	<input
-		id="amount"
-		type="number"
-		bind:value={amount}
-		placeholder="$10.00"
-		on:input={(e) => (e.target.value = e.target.value.replace(/[^\d.]/g, ''))}
-	/>
+	<select id="amount" bind:value={amount} class="styled-select">
+		<option value="10.00">$10.00</option>
+		<option value="20.00">$20.00</option>
+		<option value="40.00">$40.00</option>
+		<option value="100.00">$100.00</option>
+		<option value="200.00">$200.00</option>
+	</select>
 
 	<br />
 	<br />
@@ -313,5 +318,31 @@
 	}
 	#payment-button {
 		width: 98%;
+		cursor: pointer; /* Change cursor to hand pointer on hover */
+	}
+
+	#payment-button:active {
+		background-color: #007bff; /* Change button color on press */
+		color: white; /* Change text color to white for better contrast */
+	}
+
+	#payment-button:active {
+		background-color: #007bff; /* Change button color on press */
+		color: white; /* Change text color to white for better contrast */
+	}
+	.styled-select {
+		width: 92%;
+		padding: 10px;
+		font-size: 16px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		background-color: white;
+		transition: border-color 0.3s ease;
+		height: 40px;
+	}
+
+	.styled-select:focus {
+		border-color: #007bff;
+		outline: none;
 	}
 </style>
