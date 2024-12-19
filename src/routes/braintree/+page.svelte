@@ -47,7 +47,6 @@
 	main {
 		background: rgba(233, 242, 252, 1);
 		height: 100vh;
-		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
