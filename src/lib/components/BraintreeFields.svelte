@@ -39,12 +39,13 @@
 									'font-size': '14px',
 									color: '#333',
 									'font-family': 'Arial, sans-serif',
-									padding: '10px'
+									padding: '10px',
+									'background-color': 'rgba(233, 242, 252, 1)'
 								},
 								'.number': {
 									border: '1px solid #ccc',
 									'border-radius': '4px',
-									'background-color': 'white'
+									'background-color': 'rgba()'
 								},
 								'.valid': {
 									color: 'green'
@@ -244,6 +245,7 @@
 	#cvv,
 	#expiration-date,
 	#postal-code {
+		background-color: rgb(233, 242, 252, 1);
 		margin-bottom: 20px;
 		border-radius: 4px;
 		padding: 10px;
@@ -315,9 +317,8 @@
 	#expiration-date,
 	#postal-code {
 		width: 92%;
-		background-color: white;
 		border: 1px solid #ccc;
-		border-radius: 4px;
+		border-radius: 7px;
 	}
 	#payment-button {
 		width: 98%;
@@ -341,7 +342,7 @@
 		font-size: 16px;
 		border: 1px solid #ccc;
 		border-radius: 4px;
-		background-color: white;
+		background-color: rgb(233, 242, 252, 1);
 		transition: border-color 0.3s ease;
 		height: 40px;
 	}
@@ -354,9 +355,19 @@
 		width: 98%;
 	}
 
+	input,
+	select {
+		background-color: rgba(233, 242, 252, 1);
+		color: rgba(12, 48, 91, 1);
+		font-family: 'Cairo', sans-serif;
+		font-size: 14px;
+	}
+
 	label {
 		font-family: 'Cairo', sans-serif;
 		font-style: normal;
 		font-size: 14px;
+		font-weight: bold;
+		color: rgba(12, 48, 91, 1);
 	}
 </style>

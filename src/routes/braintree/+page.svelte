@@ -7,11 +7,29 @@
 </script>
 
 <main>
-	<h1>Pay Here!</h1>
+	<h1>Add funds</h1>
 	<BraintreeFields />
+	<div id="form-images">
+		<img src="/processors.png" id="processor-image" alt="Accepted forms of payment" />
+		<img src="/secure.jpeg" id="secure-image" alt="Secure payments" />
+	</div>
 </main>
 
 <style>
+	#form-images {
+		width: 100vw;
+		text-align: center;
+		padding: 1em 0;
+	}
+	img#processor-image {
+		width: 20%;
+		margin: auto;
+		display: inline-block;
+	}
+	img#secure-image {
+		width: 10vw;
+		display: inline-block;
+	}
 	h1 {
 		margin: 10px auto;
 		width: 80%;
@@ -26,6 +44,8 @@
 	main {
 		background: rgba(233, 242, 252, 1);
 		height: 100vh;
-		padding: 10vh 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 </style>
