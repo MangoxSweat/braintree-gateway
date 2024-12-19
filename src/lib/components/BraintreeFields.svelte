@@ -231,6 +231,9 @@
 {/if}
 
 <style>
+	#hosted-fields-form {
+		background-color: white;
+	}
 	.result-message {
 		margin: auto;
 		width: 50%;
@@ -319,6 +322,8 @@
 	#payment-button {
 		width: 98%;
 		cursor: pointer; /* Change cursor to hand pointer on hover */
+		background-color: rgba(30, 121, 228, 1); /* Set button color to rgba(30, 121, 228, 1) */
+		color: white;
 	}
 
 	#payment-button:active {
@@ -344,5 +349,14 @@
 	.styled-select:focus {
 		border-color: #007bff;
 		outline: none;
+	}
+	.styled-select {
+		width: 98%;
+	}
+
+	label {
+		font-family: 'Cairo', sans-serif;
+		font-style: normal;
+		font-size: 14px;
 	}
 </style>
