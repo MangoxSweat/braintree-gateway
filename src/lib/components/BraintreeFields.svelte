@@ -232,9 +232,6 @@
 {/if}
 
 <style>
-	#hosted-fields-form {
-		background-color: white;
-	}
 	.result-message {
 		margin: auto;
 		width: 50%;
@@ -255,7 +252,9 @@
 
 	/* General form styles */
 	#hosted-fields-form {
-		width: 33.33%; /* One third of the screen for desktops */
+		background-color: white;
+		width: 90%; /* Default to 90% of the screen */
+		max-width: 500px; /* Maximum width for larger screens */
 		margin: 0 auto; /* Center the form */
 		padding: 20px;
 		border: 1px solid #ccc;
@@ -264,19 +263,11 @@
 		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 	}
 
-	@media (max-width: 768px) {
-		#hosted-fields-form {
-			width: 80%; /* 80% of the screen for small screens */
-		}
-	}
-
 	@media (max-width: 480px) {
 		#hosted-fields-form {
-			width: 100%; /* 100% of the screen for very small devices */
+			width: 95%; /* 100% of the screen for very small devices */
 		}
 	}
-
-	/* Styles for each hosted field container */
 	#card-number,
 	#cvv,
 	#expiration-date {

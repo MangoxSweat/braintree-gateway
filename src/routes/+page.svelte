@@ -10,27 +10,25 @@
 	<h1>Add funds</h1>
 	<BraintreeFields />
 	<div id="form-images">
-		<img src="/processors.png" id="processor-image" alt="Accepted forms of payment" />
-		<img src="/secure.jpeg" id="secure-image" alt="Secure payments" />
+		<img src="/secure.png" id="secure-image" alt="Secure payments" />
 	</div>
 </main>
 
 <style>
+	:global(body) {
+		background-color: rgba(233, 242, 252, 1);
+	}
 	#form-images {
 		width: 100vw;
 		text-align: center;
 		padding: 1em 0;
-	}
-	img#processor-image {
-		width: 20%;
-		margin: auto;
-		display: inline-block;
 	}
 	img#secure-image {
 		width: 10vw;
 		display: inline-block;
 	}
 	h1 {
+		padding-top: 1em;
 		margin: 10px auto;
 		width: 80%;
 		text-align: center;
@@ -44,8 +42,19 @@
 	main {
 		background: rgba(233, 242, 252, 1);
 		height: 100vh;
-		display: flex;
 		flex-direction: column;
 		justify-content: center;
+	}
+
+	@media (max-width: 600px) {
+		img#secure-image {
+			width: 50vw;
+		}
+		h1 {
+			width: 90%;
+		}
+		main {
+			padding: 1em;
+		}
 	}
 </style>
