@@ -14,7 +14,7 @@
 		// Fetch client token from your server
 		console.log('onmount payment component');
 		axios
-			.get('/api/braintree/get-token')
+			.get('/braintree/get-token')
 			.then((response) => {
 				const token = response.data.clientToken;
 				if (!token) {
@@ -106,7 +106,7 @@
 
 			// Send nonce to your server for processing
 			axios
-				.post('/api/braintree/process-payment', {
+				.post('/braintree/process-payment', {
 					amount: parseFloat(amount),
 					cardholderName: cardholderName,
 					username: username,

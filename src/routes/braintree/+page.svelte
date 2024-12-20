@@ -23,11 +23,6 @@
 		text-align: center;
 		padding: 1em 0;
 	}
-	img#processor-image {
-		width: 20%;
-		margin: auto;
-		display: inline-block;
-	}
 	img#secure-image {
 		width: 10vw;
 		display: inline-block;
