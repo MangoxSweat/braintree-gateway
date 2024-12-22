@@ -30,9 +30,10 @@
 		"vite": "^5.0.3"
 	},
 	"dependencies": {
+		"@paypal/paypal-js": "^8.1.2",
 		"@paypal/paypal-server-sdk": "^0.6.1",
 		"@sveltejs/adapter-node": "^5.2.9",
-		"axios": "^1.7.7",
+		"axios": "^1.7.9",
 		"body-parser": "^1.20.3",
 		"braintree": "^3.26.0",
 		"braintree-web": "^3.112.1",

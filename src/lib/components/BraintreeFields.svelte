@@ -44,8 +44,7 @@
 								},
 								'.number': {
 									border: '1px solid #ccc',
-									'border-radius': '4px',
-									'background-color': 'rgba()'
+									'border-radius': '4px'
 								},
 								'.valid': {
 									color: 'green'
