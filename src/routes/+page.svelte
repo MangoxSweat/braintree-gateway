@@ -126,7 +126,8 @@
 								postal_code: cardBillingAddressPostalCode
 							}
 						}
-					}
+					},
+					username: username
 				})
 				.then(() => {
 					//submit successful
@@ -156,12 +157,12 @@
 						{
 							amount: {
 								currency_code: 'USD',
-								value: amount
+								value: amount + 4
 							}
 						}
 					],
 					username: username,
-					amount: amount
+					amount: amount + 4
 				})
 			});
 
@@ -190,7 +191,11 @@
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
-				}
+				},
+				body: JSON.stringify({
+					username: username,
+					amount: amount
+				})
 			});
 
 			const orderData = await response.json();
@@ -221,24 +226,45 @@
 
 				throw new Error(errorMessage);
 			} else {
+				try {
+					const updateBalance = await fetch('/api/updateBalance', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							username: username,
+							amount: amount
+						})
+					});
+
+					const response = await updateBalance.json();
+
+					console.log('add payment response: ', response);
+				} catch (error) {
+					console.error(error);
+				}
+
 				console.log('outcome 3');
 				// (3) Successful transaction -> Show confirmation or thank you message
 				// Or go to another URL:  actions.redirect('thank_you.html');
 				resultMessage(
-					`Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`
+					`Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
+					'green'
 				);
 				console.log('Capture result', orderData.body, JSON.stringify(orderData.body, null, 2));
 			}
 		} catch (error) {
 			console.error(error);
-			resultMessage(`Sorry, your transaction could not be processed...<br><br>${error}`);
+			resultMessage(`Sorry, your transaction could not be processed...<br><br>${error}`, 'red');
 		}
 	}
 
 	// Example function to show a result to the user. Your site's UI library can be used instead.
-	function resultMessage(message) {
+	function resultMessage(message, color) {
 		const container = document.querySelector('#result-message');
 		container.innerHTML = message;
+		container.style.borderColor = color;
 	}
 
 	// Load PayPal SDK
@@ -284,6 +310,7 @@
 		<div id="card-number-field-container"></div>
 		<div id="card-expiry-field-container"></div>
 		<div id="card-cvv-field-container"></div>
+		<!--
 		<div id="billing-address" style:margin-top="1em">
 			<label for="card-billing-address-line-1">Billing Address</label>
 			<input
@@ -345,6 +372,7 @@
 				bind:value={cardBillingAddressPostalCode}
 			/>
 		</div>
+        -->
 		<br /><br />
 		<button
 			id="card-field-submit-button"
@@ -366,6 +394,9 @@
 {/if}
 
 <style>
+	#result-message {
+		border: 3px solid;
+	}
 	main {
 		display: flex;
 		flex-direction: column;

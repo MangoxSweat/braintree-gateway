@@ -13,7 +13,7 @@ export const POST = async ({ request }) => {
 		return json(jsonResponse, { status: httpStatusCode });
 	} catch (error) {
 		console.error('Failed to create order:', error);
-		return json({ error: 'Failed to create order.' }, { status: 500 });
+		return json({ error: `Failed to create order. - ${error}` }, { status: 500 });
 	}
 };
 
@@ -23,7 +23,6 @@ async function verifyUser(username) {
 		if (!username) {
 			console.log('No username provided');
 			throw new Error('No username provided');
-			return false;
 		}
 
 		const url = `https://igmorefollowers.com/adminapi/v2/users?username=${username}`;
@@ -32,9 +31,9 @@ async function verifyUser(username) {
 		};
 
 		const response = await axios.get(url, { headers });
-		if (response.data.data.count === 0) {
+
+		if (response.data.data.count == 0) {
 			console.error('User not found');
-			throw new Error('Username not found');
 			return false;
 		}
 
@@ -42,6 +41,7 @@ async function verifyUser(username) {
 		return true;
 	} catch (error) {
 		console.error('Error verifying user:', error.message);
+		throw new Error(error.message);
 	}
 }
 
