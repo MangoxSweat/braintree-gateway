@@ -38,7 +38,7 @@ export async function POST({ request }) {
 	try {
 		const { username, amount } = await request.json();
 
-		const balance = await addPayment(amount, username, 'Perfect Money USD');
+		const balance = await addPayment(amount, username, 'USD');
 
 		return json({
 			status: 200,
