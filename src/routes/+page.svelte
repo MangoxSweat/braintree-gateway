@@ -10,7 +10,7 @@
 	let cardBillingAddressPostalCode = '';
 	let cardField;
 	let cardFieldSubmitButton;
-	let amount;
+	let amount = '10';
 	let username;
 
 	$: paypalReady && initPayPalButtons();
@@ -33,7 +33,7 @@
 					label: 'paypal'
 				},
 				message: {
-					amount: 100
+					amount: amount
 				}
 			})
 			.render('#paypal-button-container');
@@ -140,12 +140,7 @@
 	};
 	async function createOrderCallback(data, actions) {
 		console.log('create callback');
-		resultMessage('');
 		try {
-			if (!amount || !username) {
-				throw new Error('Amount or Username field empty');
-			}
-
 			const response = await fetch('/api/orders', {
 				method: 'POST',
 				headers: {
@@ -157,12 +152,12 @@
 						{
 							amount: {
 								currency_code: 'USD',
-								value: amount + 4
+								value: amount
 							}
 						}
 					],
 					username: username,
-					amount: amount + 4
+					amount: amount
 				})
 			});
 
@@ -180,7 +175,7 @@
 			}
 		} catch (error) {
 			console.error(error);
-			resultMessage(`Could not initiate PayPal Checkout...<br><br>${error}`);
+			resultMessage(`Could not initiate PayPal Checkout...<br><br>${error.message}`, 'red');
 		}
 	}
 
@@ -226,30 +221,24 @@
 
 				throw new Error(errorMessage);
 			} else {
-				try {
-					const updateBalance = await fetch('/api/updateBalance', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							username: username,
-							amount: amount
-						})
-					});
+				const updateBalance = await fetch('/api/updateBalance', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						username: username,
+						amount: amount
+					})
+				});
 
-					const response = await updateBalance.json();
-
-					console.log('add payment response: ', response);
-				} catch (error) {
-					console.error(error);
+				const response = await updateBalance.json();
+				if (response.body.error) {
+					throw new Error(response.body.error);
 				}
 
-				console.log('outcome 3');
-				// (3) Successful transaction -> Show confirmation or thank you message
-				// Or go to another URL:  actions.redirect('thank_you.html');
 				resultMessage(
-					`Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
+					`Transaction ${transaction.status}: ${transaction.id}<br><br>${response.body.success}.`,
 					'green'
 				);
 				console.log('Capture result', orderData.body, JSON.stringify(orderData.body, null, 2));
@@ -265,6 +254,8 @@
 		const container = document.querySelector('#result-message');
 		container.innerHTML = message;
 		container.style.borderColor = color;
+		container.style.borderWidth = '3px';
+		container.style.borderStyle = 'solid';
 	}
 
 	// Load PayPal SDK
@@ -297,7 +288,12 @@
 		</div>
 		<div style:display="block">
 			<label style:width="100%" for="amount">Amount</label>
-			<select id="amount" name="amount" bind:value={amount}>
+			<select
+				id="amount"
+				name="amount"
+				bind:value={amount}
+				on:change={(e) => (amount = e.target.value)}
+			>
 				<option value="10">$10</option>
 				<option value="20">$20</option>
 				<option value="50">$50</option>
@@ -395,7 +391,7 @@
 
 <style>
 	#result-message {
-		border: 3px solid;
+		padding: 1em;
 	}
 	main {
 		display: flex;

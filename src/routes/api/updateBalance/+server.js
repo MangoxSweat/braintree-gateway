@@ -19,15 +19,17 @@ async function addPayment(amt, user, meth) {
 	};
 
 	try {
+		console.log('update amount: ', amt);
 		const response = await axios.post(url, body, { headers });
 
+		if (response.error_code) {
+			throw new Error(response.error_message);
+		}
+
 		console.log('Updated balance to: ', response.data.data.user.balance);
-		return json(response.data.data.user.balance);
+		return response.data.data.user.balance;
 	} catch (error) {
-		console.error(
-			'Error adding payment igmorefollowers:',
-			error.response ? error.response.data : error.message
-		);
+		console.error('Error adding payment igmorefollowers:', error.message);
 		throw new Error('Failed to add payment');
 	}
 }
@@ -40,7 +42,7 @@ export async function POST({ request }) {
 
 		return json({
 			status: 200,
-			body: { success: `Balance Successfully Updated to ${balance}` }
+			body: { success: `Your balance successfully updated to ${balance}` }
 		});
 	} catch (error) {
 		console.error('Failed to capture order:', error);

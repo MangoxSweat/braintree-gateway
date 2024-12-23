@@ -41,7 +41,7 @@ export async function POST({ params }) {
 
 		return json({
 			status: httpStatusCode,
-			body: jsonResponse
+			jsonResponse
 		});
 	} catch (error) {
 		console.error('Failed to capture order:', error);

@@ -7,13 +7,16 @@ export const POST = async ({ request }) => {
 	try {
 		// Use the cart information passed from the front-end to calculate the order amount details
 		const { username, amount } = await request.json();
-		console.log('username', username);
 		console.log('amount', amount);
-		const { jsonResponse, httpStatusCode } = await createOrder(username, amount);
+
+		const amountPlusFees = parseInt(amount) + 4;
+		console.log('real amount', amountPlusFees);
+
+		const { jsonResponse, httpStatusCode } = await createOrder(username, amountPlusFees.toString());
 		return json(jsonResponse, { status: httpStatusCode });
 	} catch (error) {
-		console.error('Failed to create order:', error);
-		return json({ error: `Failed to create order. - ${error}` }, { status: 500 });
+		console.log('Failed to create order:', error.message);
+		return json({ message: error.message }, { status: 500 });
 	}
 };
 
@@ -34,13 +37,13 @@ async function verifyUser(username) {
 
 		if (response.data.data.count == 0) {
 			console.error('User not found');
-			return false;
+			throw new Error('User not found!');
 		}
 
 		console.log('username valid');
 		return true;
 	} catch (error) {
-		console.error('Error verifying user:', error.message);
+		console.error('Error verifying user:', error);
 		throw new Error(error.message);
 	}
 }
