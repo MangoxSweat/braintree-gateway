@@ -127,6 +127,9 @@
 							}
 						}
 					},
+					verification: {
+						method: 'SCA_ALWAYS'
+					},
 					username: username
 				})
 				.then(() => {
@@ -138,6 +141,7 @@
 			// Handle error (e.g., show error message to the user)
 		}
 	};
+
 	async function createOrderCallback(data, actions) {
 		console.log('create callback');
 		try {
@@ -148,6 +152,10 @@
 				},
 				body: JSON.stringify({
 					intent: 'CAPTURE',
+					contingencies: ['3D_SECURE'], // Enable 3D Secure if applicable
+					verification: {
+						method: 'SCA_ALWAYS'
+					},
 					purchase_units: [
 						{
 							amount: {
@@ -210,17 +218,18 @@
 				// (2) Other non-recoverable errors -> Show a failure message
 				let errorMessage;
 				if (transaction) {
-					console.log('outcome 1');
 					errorMessage = `Transaction ${transaction.status}: ${transaction.id}`;
 				} else if (errorDetail) {
 					console.log('outcome 2');
 					errorMessage = `${errorDetail.description} (${orderData.debug_id})`;
 				} else {
+					console.log('outcome 1');
 					errorMessage = JSON.stringify(orderData.body);
 				}
 
 				throw new Error(errorMessage);
 			} else {
+				console.log('outcome 3');
 				const updateBalance = await fetch('/api/updateBalance', {
 					method: 'POST',
 					headers: {
@@ -263,7 +272,7 @@
 		console.log('onmount');
 		const script = document.createElement('script');
 		script.src =
-			'https://www.paypal.com/sdk/js?client-id=AdzwTEbAUluN_lm_NMdLozUJ5k6_TuURIOOuxsKDRX5bGC4EDsoTlmkrmXizRcot-x3PhlbKnZpjuLns&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=venmo';
+			'https://www.paypal.com/sdk/js?client-id=Aa7ii1FdjWNw9FGl37lbCKzFw1QHxFIU09WPla51pCuKR8-RwUZ-N6SBJkMGzyEA30ByMmjxcMaFocpm&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=venmo';
 
 		script.setAttribute('data-sdk-integration-source', 'developer-studio');
 		script.onload = () => (paypalReady = true);
@@ -382,12 +391,7 @@
 	<p id="result-message"></p>
 
 	<div id="paypal-button-container" class="paypal-button-container"></div>
-
-	<img src="/secure.png" id="secure-image" alt="Secure payments" />
 </main>
-{#if paypalReady}{:else}
-	<p>Loading PayPal...</p>
-{/if}
 
 <style>
 	#result-message {
@@ -422,6 +426,7 @@
 		margin: auto;
 	}
 	.paypal-button-container {
+		margin: auto;
 		margin-top: 20px;
 		width: 45vw;
 	}
