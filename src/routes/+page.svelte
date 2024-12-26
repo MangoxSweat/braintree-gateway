@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-
 	let paypalReady = false;
+
 	let cardBillingAddressLine1 = '';
 	let cardBillingAddressLine2 = '';
 	let cardBillingAddressAdminAreaLine1 = '';
@@ -194,11 +194,7 @@
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					username: username,
-					amount: amount
-				})
+				}
 			});
 
 			const orderData = await response.json();
@@ -272,7 +268,7 @@
 		console.log('onmount');
 		const script = document.createElement('script');
 		script.src =
-			'https://www.paypal.com/sdk/js?client-id=Aa7ii1FdjWNw9FGl37lbCKzFw1QHxFIU09WPla51pCuKR8-RwUZ-N6SBJkMGzyEA30ByMmjxcMaFocpm&components=buttons,card-fields';
+			'https://www.sandbox.paypal.com/sdk/js?client-id=Aa7ii1FdjWNw9FGl37lbCKzFw1QHxFIU09WPla51pCuKR8-RwUZ-N6SBJkMGzyEA30ByMmjxcMaFocpm&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=venmo';
 
 		script.setAttribute('data-sdk-integration-source', 'developer-studio');
 		script.onload = () => (paypalReady = true);

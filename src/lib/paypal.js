@@ -13,11 +13,11 @@ dotenv.config();
 
 const client = new Client({
 	clientCredentialsAuthCredentials: {
-		oAuthClientId: process.env.PAYPAL_CLIENT_ID,
-		oAuthClientSecret: process.env.PAYPAL_CLIENT_SECRET
+		oAuthClientId: process.env.PAYPAL_LIVE_CLIENT_ID,
+		oAuthClientSecret: process.env.PAYPAL_LIVE_CLIENT_SECRET
 	},
 	timeout: 0,
-	environment: Environment.Sandbox,
+	environment: Environment.LIVE,
 	logging: {
 		logLevel: LogLevel.Info,
 		logRequest: { logBody: true },

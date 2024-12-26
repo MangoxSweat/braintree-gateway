@@ -15,7 +15,7 @@ export const POST = async ({ request }) => {
 		const { jsonResponse, httpStatusCode } = await createOrder(username, amountPlusFees.toString());
 		return json(jsonResponse, { status: httpStatusCode });
 	} catch (error) {
-		console.log('Failed to create order:', error.message);
+		console.log('Failed to create order:', error);
 		return json({ message: error.message }, { status: 500 });
 	}
 };
@@ -63,8 +63,7 @@ const createOrder = async (username, amount) => {
 						currencyCode: 'USD',
 						// Replace with dynamic cart total calculation
 						value: amount
-					},
-					username: username
+					}
 				}
 			],
 			paymentSource: {
