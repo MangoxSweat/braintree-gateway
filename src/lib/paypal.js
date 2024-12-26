@@ -13,9 +13,18 @@ import {
 	PaymentsController
 } from '@paypal/paypal-server-sdk';
 
+const clientId = process.env.PAYPAL_LIVE_CLIENT_ID;
+const clientSecret = process.env.PAYPAL_LIVE_CLIENT_SECRET;
+
+if (!clientId || !clientSecret) {
+	throw new Error('PayPal client ID and secret must be set in environment variables');
+}
+
 const client = new Client({
-	clientId: `${process.env.PAYPAL_LIVE_CLIENT_ID}`,
-	clientSecret: `${process.env.PAYPAL_LIVE_CLIENT_SECRET}`,
+	clientCredentialsAuthCredentials: {
+		oAuthClientId: clientId,
+		oAuthClientSecret: clientSecret
+	},
 	timeout: 0,
 	environment: Environment.Production,
 	logging: {
