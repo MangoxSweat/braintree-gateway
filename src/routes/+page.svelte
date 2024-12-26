@@ -226,7 +226,7 @@
 				throw new Error(errorMessage);
 			} else {
 				console.log('outcome 3');
-				const updateBalance = await fetch('/api/updateBalance', {
+				const updateBalance = await fetch('/api/igmorefollowers/updateBalance', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
