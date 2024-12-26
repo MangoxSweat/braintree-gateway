@@ -268,7 +268,7 @@
 		console.log('onmount');
 		const script = document.createElement('script');
 		script.src =
-			'https://www.sandbox.paypal.com/sdk/js?client-id=Aa7ii1FdjWNw9FGl37lbCKzFw1QHxFIU09WPla51pCuKR8-RwUZ-N6SBJkMGzyEA30ByMmjxcMaFocpm&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=venmo';
+			'https://www.paypal.com/sdk/js?client-id=Aa7ii1FdjWNw9FGl37lbCKzFw1QHxFIU09WPla51pCuKR8-RwUZ-N6SBJkMGzyEA30ByMmjxcMaFocpm&buyer-country=US&currency=USD&components=buttons,card-fields&enable-funding=venmo';
 
 		script.setAttribute('data-sdk-integration-source', 'developer-studio');
 		script.onload = () => (paypalReady = true);
