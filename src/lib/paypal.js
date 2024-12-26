@@ -14,8 +14,8 @@ import {
 } from '@paypal/paypal-server-sdk';
 
 const client = new Client({
-	oAuthClientId: process.env.PAYPAL_LIVE_CLIENT_ID,
-	oAuthClientSecret: process.env.PAYPAL_LIVE_CLIENT_SECRET,
+	clientId: `${process.env.PAYPAL_LIVE_CLIENT_ID}`,
+	clientSecret: `${process.env.PAYPAL_LIVE_CLIENT_SECRET}`,
 	timeout: 0,
 	environment: Environment.Production,
 	logging: {
