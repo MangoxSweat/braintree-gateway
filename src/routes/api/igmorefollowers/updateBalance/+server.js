@@ -3,7 +3,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
 
-async function addPayment(amt, user, meth) {
+async function addPayment(amt, user) {
 	console.log('add payment igmorefollowers');
 	const url = 'https://igmorefollowers.com/adminapi/v2/payments/add';
 	const body = {
@@ -38,7 +38,7 @@ export async function POST({ request }) {
 	try {
 		const { username, amount } = await request.json();
 
-		const balance = await addPayment(amount, username, 'USD');
+		const balance = await addPayment(amount, username);
 
 		return json({
 			status: 200,
