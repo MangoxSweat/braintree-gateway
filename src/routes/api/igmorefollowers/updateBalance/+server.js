@@ -9,7 +9,7 @@ async function addPayment(amt, user, meth) {
 	const body = {
 		username: user,
 		amount: amt,
-		method: meth,
+		method: 'Perfect Money USD',
 		memo: 'added via Admin API',
 		affiliate_commission: false
 	};
