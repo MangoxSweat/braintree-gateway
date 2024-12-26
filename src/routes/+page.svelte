@@ -214,9 +214,9 @@
 				// (2) Other non-recoverable errors -> Show a failure message
 				let errorMessage;
 				if (transaction) {
+					console.log('outcome 2');
 					errorMessage = `Transaction ${transaction.status}: ${transaction.id}`;
 				} else if (errorDetail) {
-					console.log('outcome 2');
 					errorMessage = `${errorDetail.description} (${orderData.debug_id})`;
 				} else {
 					console.log('outcome 1');
