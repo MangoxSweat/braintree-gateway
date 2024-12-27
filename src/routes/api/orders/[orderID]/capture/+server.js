@@ -23,7 +23,7 @@ const captureOrder = async (orderID) => {
 		// const { statusCode, headers } = httpResponse;
 		//
 		//
-		console.log('oc capture', body);
+		console.log('oc capture', httpResponse.result.purchaseUnits);
 
 		return {
 			jsonResponse: JSON.parse(body),

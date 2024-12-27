@@ -62,7 +62,8 @@ const createOrder = async (username, amount) => {
 					amount: {
 						currencyCode: 'USD',
 						// Replace with dynamic cart total calculation
-						value: amount
+						value: amount,
+						user: username
 					}
 				}
 			],
