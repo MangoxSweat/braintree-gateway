@@ -1,13 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import { goto } from '@sveltejs/kit/navigation';
 
-	onMount(() => {
-		const isAuthenticated = checkAuth(); // Replace with your actual authentication check
-		if (!isAuthenticated) {
-			goto('/login'); // Redirect to login page if not authenticated
-		}
-	});
+	onMount(() => {});
 
 	function checkAuth() {
 		// Implement your authentication logic here
