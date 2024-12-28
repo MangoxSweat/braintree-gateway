@@ -9,16 +9,27 @@ dotenv.config();
 console.log('Initializing logger and ensuring logs directory.');
 
 await ensureLogsDirectory();
+const logger = await getLogger();
 
-const logger = pino({
-	transport: {
-		target: 'pino-pretty',
-		options: {
-			destination: './logs/app.log',
-			colorize: true
-		}
-	}
-});
+async function getLogger() {
+	// Dynamically import pino
+	const pino = (await import('pino')).default;
+	const logFile = await fs.open('./logs/app.log', 'a'); // Open log file for appending
+	console.log('getting logger');
+	return pino(
+		{
+			level: 'info',
+			transport: {
+				target: 'pino-pretty',
+				options: {
+					destination: './logs/app.log',
+					colorize: true
+				}
+			}
+		},
+		logFile
+	); // Initialize logger with file destination
+}
 
 async function ensureLogsDirectory() {
 	await fs.mkdir('./logs', { recursive: true });
@@ -48,9 +59,12 @@ async function addPayment(amt, user, trans) {
 		}
 
 		console.log('Updated balance to: ', response.data.data.user.balance);
-		logger.info(`transaction id: ${trans} - Username: ${user} - Amount: ${amt}`);
+		logger.info(`Successful transaction - ID: ${trans} - Username: ${user} - Amount: ${amt}`);
 		return response.data.data.user.balance;
 	} catch (error) {
+		logger.error(
+			`Failed transaction - ID: ${trans} - Username: ${user} - Amount: ${amt} - Error: ${error.message}`
+		);
 		console.error('Error adding payment igmorefollowers:', error.message);
 		throw new Error('Failed to add payment');
 	}
