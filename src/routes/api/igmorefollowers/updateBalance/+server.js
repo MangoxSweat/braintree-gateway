@@ -2,11 +2,27 @@ import { json } from '@sveltejs/kit';
 import axios from 'axios';
 import pino from 'pino';
 import dotenv from 'dotenv';
+import fs from 'fs/promises';
 dotenv.config();
 
-const logger = pino();
+// This runs when the module is first imported
+console.log('Initializing logger and ensuring logs directory.');
 
-logger.info('Log message');
+await ensureLogsDirectory();
+
+const logger = pino({
+	transport: {
+		target: 'pino-pretty',
+		options: {
+			destination: './logs/app.log',
+			colorize: true
+		}
+	}
+});
+
+async function ensureLogsDirectory() {
+	await fs.mkdir('./logs', { recursive: true });
+}
 
 async function addPayment(amt, user, trans) {
 	console.log('add payment igmorefollowers');
@@ -32,7 +48,7 @@ async function addPayment(amt, user, trans) {
 		}
 
 		console.log('Updated balance to: ', response.data.data.user.balance);
-		console.log(`transaction id: ${trans} - Username: ${user} - Amount: ${amt}`);
+		logger.info(`transaction id: ${trans} - Username: ${user} - Amount: ${amt}`);
 		return response.data.data.user.balance;
 	} catch (error) {
 		console.error('Error adding payment igmorefollowers:', error.message);
