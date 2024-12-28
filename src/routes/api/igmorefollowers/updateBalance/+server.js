@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import pino from 'pino';
+const pino = require('pino');
 dotenv.config();
 
 const logger = pino();
