@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import axios from 'axios';
+import pino from 'pino';
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
 dotenv.config();
@@ -12,10 +13,8 @@ const logger = await getLogger();
 
 async function getLogger() {
 	// Dynamically import pino
-	const pino = (await import('pino')).default;
 	const logFile = await fs.open('./logs/app.log', 'a'); // Open log file for appending
-	console.log('getting logger');
-	return pino(
+	const logger = pino(
 		{
 			level: 'info',
 			transport: {
@@ -28,6 +27,13 @@ async function getLogger() {
 		},
 		logFile
 	); // Initialize logger with file destination
+
+	// Ensure the log file is closed when the process exits
+	process.on('exit', async () => {
+		await logFile.close();
+	});
+
+	return logger;
 }
 
 async function ensureLogsDirectory() {
