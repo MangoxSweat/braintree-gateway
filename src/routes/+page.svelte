@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import pino from 'pino';
 	let paypalReady = false;
 
 	let cardBillingAddressLine1 = '';
@@ -111,6 +112,7 @@
 	// Add click listener to submit button and call the submit function on the CardField component
 	const submitCardField = async () => {
 		console.log('Submitting card field...');
+		cardFieldSubmitButton.disabled = true; // Disable the button
 		try {
 			const response = await cardField
 				.submit({
@@ -135,10 +137,26 @@
 				.then(() => {
 					//submit successful
 					console.log('submit successful');
+
+					// Clear form fields
+					username = '';
+					cardBillingAddressLine1 = '';
+					cardBillingAddressLine2 = '';
+					cardBillingAddressAdminAreaLine1 = '';
+					cardBillingAddressAdminAreaLine2 = '';
+					cardBillingAddressCountryCode = '';
+					cardBillingAddressPostalCode = '';
+					amount = '10';
+
+					// Clear input fields
+					document.getElementById('username').value = '';
+					document.getElementById('amount').value = '10';
 				});
 		} catch (error) {
 			console.error('Error submitting card field:', error);
 			// Handle error (e.g., show error message to the user)
+		} finally {
+			cardFieldSubmitButton.disabled = false; // Re-enable the button
 		}
 	};
 
@@ -267,10 +285,10 @@
 	onMount(() => {
 		console.log('onmount');
 		const script = document.createElement('script');
-		//script.src ='https://www.sandbox.paypal.com/sdk/js?client-id=AdzwTEbAUluN_lm_NMdLozUJ5k6_TuURIOOuxsKDRX5bGC4EDsoTlmkrmXizRcot-x3PhlbKnZpjuLns&components=buttons,card-fields&enable-funding=venmo';
-
 		script.src =
-			'https://www.paypal.com/sdk/js?client-id=Adb7Xn3r_1RTRD9iUNMS92Ad3nuz1FmW-Gl0kBwLfkZCl29PeX64UcMqppn4t6nTKv1z_z18WeXiLLO0&components=buttons,card-fields&enable-funding=venmo';
+			'https://www.sandbox.paypal.com/sdk/js?client-id=AdzwTEbAUluN_lm_NMdLozUJ5k6_TuURIOOuxsKDRX5bGC4EDsoTlmkrmXizRcot-x3PhlbKnZpjuLns&components=buttons,card-fields&enable-funding=venmo';
+
+		//script.src =('https://www.paypal.com/sdk/js?client-id=Adb7Xn3r_1RTRD9iUNMS92Ad3nuz1FmW-Gl0kBwLfkZCl29PeX64UcMqppn4t6nTKv1z_z18WeXiLLO0&components=buttons,card-fields&enable-funding=venmo');
 		script.setAttribute('data-sdk-integration-source', 'developer-studio');
 		script.onload = () => (paypalReady = true);
 		document.head.appendChild(script);
