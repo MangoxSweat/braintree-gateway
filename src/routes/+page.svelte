@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from 'svelte';
-	import pino from 'pino';
 	let paypalReady = false;
 
 	let cardBillingAddressLine1 = '';
@@ -286,10 +285,10 @@
 	onMount(() => {
 		console.log('onmount');
 		const script = document.createElement('script');
-		script.src =
-			'https://www.sandbox.paypal.com/sdk/js?client-id=AdzwTEbAUluN_lm_NMdLozUJ5k6_TuURIOOuxsKDRX5bGC4EDsoTlmkrmXizRcot-x3PhlbKnZpjuLns&components=buttons,card-fields&enable-funding=venmo';
+		//script.src =		'https://www.sandbox.paypal.com/sdk/js?client-id=AdzwTEbAUluN_lm_NMdLozUJ5k6_TuURIOOuxsKDRX5bGC4EDsoTlmkrmXizRcot-x3PhlbKnZpjuLns&components=buttons,card-fields&enable-funding=venmo';
 
-		//script.src =('https://www.paypal.com/sdk/js?client-id=Adb7Xn3r_1RTRD9iUNMS92Ad3nuz1FmW-Gl0kBwLfkZCl29PeX64UcMqppn4t6nTKv1z_z18WeXiLLO0&components=buttons,card-fields&enable-funding=venmo');
+		script.src =
+			'https://www.paypal.com/sdk/js?client-id=Adb7Xn3r_1RTRD9iUNMS92Ad3nuz1FmW-Gl0kBwLfkZCl29PeX64UcMqppn4t6nTKv1z_z18WeXiLLO0&components=buttons,card-fields&enable-funding=venmo';
 		script.setAttribute('data-sdk-integration-source', 'developer-studio');
 		script.onload = () => (paypalReady = true);
 		document.head.appendChild(script);

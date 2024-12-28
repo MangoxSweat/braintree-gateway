@@ -25,18 +25,18 @@ if (!clientId || !clientSecret) {
 }
 
 const client = new Client({
-	/*
 	clientCredentialsAuthCredentials: {
 		oAuthClientId: clientId,
 		oAuthClientSecret: clientSecret
 	},
-    */
+	/*
 	clientCredentialsAuthCredentials: {
 		oAuthClientId: sandboxId,
 		oAuthClientSecret: sandboxSecret
 	},
+    */
 	timeout: 0,
-	environment: Environment.Sandbox,
+	environment: Environment.Production,
 	logging: {
 		logLevel: LogLevel.Info,
 		logRequest: { logBody: true },
