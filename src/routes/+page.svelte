@@ -251,7 +251,8 @@
 					},
 					body: JSON.stringify({
 						username: username,
-						amount: amount
+						amount: amount,
+						transaction: transaction.id
 					})
 				});
 

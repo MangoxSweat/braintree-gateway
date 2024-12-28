@@ -1,9 +1,14 @@
 import { json } from '@sveltejs/kit';
 import axios from 'axios';
+import pino from 'pino';
 import dotenv from 'dotenv';
 dotenv.config();
 
-async function addPayment(amt, user) {
+const logger = pino();
+
+logger.info('Log message');
+
+async function addPayment(amt, user, trans) {
 	console.log('add payment igmorefollowers');
 	const url = 'https://igmorefollowers.com/adminapi/v2/payments/add';
 	const body = {
@@ -27,6 +32,7 @@ async function addPayment(amt, user) {
 		}
 
 		console.log('Updated balance to: ', response.data.data.user.balance);
+		console.log(`transaction id: ${trans} - Username: ${user} - Amount: ${amt}`);
 		return response.data.data.user.balance;
 	} catch (error) {
 		console.error('Error adding payment igmorefollowers:', error.message);
@@ -36,9 +42,9 @@ async function addPayment(amt, user) {
 
 export async function POST({ request }) {
 	try {
-		const { username, amount } = await request.json();
+		const { username, amount, transaction } = await request.json();
 
-		const balance = await addPayment(amount, username);
+		const balance = await addPayment(amount, username, transaction);
 
 		return json({
 			status: 200,
