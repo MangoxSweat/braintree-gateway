@@ -9,7 +9,6 @@ export async function load({ fetch }) {
 			throw new Error('Failed to fetch logs');
 		}
 		const data = await res.json(); // Parse the JSON response
-		console.log('load', data);
 
 		return { logs: data.logs }; // Pass the logs to the page as props
 	} catch (err) {

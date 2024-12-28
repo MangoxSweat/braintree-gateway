@@ -4,7 +4,7 @@
 	onMount(() => {});
 </script>
 
-<h1>Dashboard</h1>
+<h1>Admin Dashboard</h1>
 <h2>igmorefollowers payment log</h2>
 <hr />
 {#if data.logs}
