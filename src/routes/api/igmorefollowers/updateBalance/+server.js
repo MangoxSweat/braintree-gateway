@@ -1,6 +1,5 @@
 import { json } from '@sveltejs/kit';
 import axios from 'axios';
-import pino from 'pino';
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
 dotenv.config();
