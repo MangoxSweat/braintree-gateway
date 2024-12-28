@@ -64,10 +64,10 @@ async function addPayment(amt, user, trans) {
 		}
 
 		console.log('Updated balance to: ', response.data.data.user.balance);
-		logger.info({paypal_id:trans, username: user, amount:amt}, `Successful balance update`});
+		logger.info({ paypal_id: trans, username: user, amount: amt }, `Successful balance update`);
 		return response.data.data.user.balance;
 	} catch (error) {
-		logger.warn({paypal_id:trans, username: user, amount:amt}, `Failed balance update`});
+		logger.error({ paypal_id: trans, username: user, amount: amt }, `Failed balance update`);
 		console.error('Error adding payment igmorefollowers:', error.message);
 		throw new Error('Failed to add payment');
 	}
