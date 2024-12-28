@@ -1,13 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
 	let { data } = $props();
-	onMount(() => {
-		console.log('logs', data.logs);
-	});
+	onMount(() => {});
 </script>
 
 <h1>Dashboard</h1>
-<h2>Log Output</h2>
+<h2>igmorefollowers payment log</h2>
 <hr />
 {#if data.logs}
 	<pre>{data.logs}</pre>
