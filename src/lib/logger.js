@@ -5,9 +5,7 @@ dotenv.config();
 export async function getLogger() {
 	// MongoDB URI
 	const mongoUrl =
-		process.env.ENVIRONMENT === 'Dev'
-			? process.env.MONGODB_LOCAL_URI
-			: process.env.MONGODB_RAILWAY_URI;
+		process.env.ENVIRONMENT === 'Dev' ? process.env.MONGODB_LOCAL_URI : process.env.MONGODB_URL;
 
 	// Transport configuration for pino-mongodb
 	const transport = pino.transport({
