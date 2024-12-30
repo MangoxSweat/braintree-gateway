@@ -4,11 +4,17 @@ import { sveltekit } from '@sveltejs/kit/vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	ssr: {
-		external: ['mongodb'] // Exclude mongodb from SSR bundling
+		external: ['mongodb'], // Exclude mongodb from SSR bundling
+		noExternal: ['mongodb'] // Ensure mongodb is not bundled for SSR
 	},
-	build: {
-		rollupOptions: {
-			external: ['mongodb'] // Exclude mongodb from client-side bundle
+	rollupOptions: {
+		external: ['mongodb'], // Exclude mongodb from client-side bundle
+		output: {
+			globals: {
+				mongodb: 'mongodb'
+			}
+		}
+	},
 		}
 	},
 	optimizeDeps: {
