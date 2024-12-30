@@ -83,12 +83,16 @@ const createOrder = async (username, amount) => {
 
 	try {
 		if (await verifyUser(username)) {
+			console.log('user verified');
 			const { result, statusCode } = await ordersController.ordersCreate(payload);
+
+			console.log('order created');
 
 			logger.info(
 				{ paypal_id: result.id, username: username, amount: amount },
 				'Order Successfully Created'
 			);
+			console.log('log created');
 
 			return {
 				jsonResponse: result,
