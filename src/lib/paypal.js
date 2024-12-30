@@ -16,6 +16,7 @@ const liveSecret = process.env.PAYPAL_LIVE_CLIENT_SECRET;
 const sandboxId = process.env.PAYPAL_SANDBOX_CLIENT_ID;
 const sandboxSecret = process.env.PAYPAL_SANDBOX_CLIENT_SECRET;
 let clientId, clientSecret;
+console.log(process.env.ENVIRONMENT);
 
 if (process.env.ENVIRONMENT === 'Live') {
 	clientId = liveId;
