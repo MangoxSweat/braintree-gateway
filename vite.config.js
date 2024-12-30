@@ -4,6 +4,8 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	build: {
-		rollupOptions: {}
+		rollupOptions: {
+			external: ['mongodb']
+		}
 	}
 });
