@@ -16,11 +16,7 @@ export async function getLogger() {
 		options: {
 			uri: mongoUrl, // MongoDB URI
 			database: process.env.MONGODB_DBS,
-			collection: 'logs', // Collection name
-			mongoOptions:
-				process.env.ENVIRONMENT === 'Dev'
-					? {}
-					: { auth: { user: process.env.MONGOUSER, password: process.env.MONGOPASSWORD } }
+			collection: 'logs' // Collection name
 		}
 	});
 

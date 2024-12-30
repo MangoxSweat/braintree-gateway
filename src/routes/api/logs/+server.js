@@ -1,5 +1,4 @@
 import { json, error } from '@sveltejs/kit';
-
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -27,5 +26,10 @@ export async function GET() {
 	} catch (err) {
 		console.error('Error fetching logs from MongoDB:', err.message);
 		throw error(500, 'Unable to fetch logs.');
+	} finally {
+		if (mongoClient) {
+			await mongoClient.close();
+			console.log('MongoClient connection closed');
+		}
 	}
 }
