@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	let { data } = $props();
-	onMount(() => {});
+	data.logs = data.logs || [];
 
 	function getLogColor(level) {
 		switch (level) {
@@ -27,9 +27,11 @@
 <svelte:head>
 	<title>Admin Dashboard</title>
 </svelte:head>
+
 <h1>Admin Dashboard</h1>
 <h2>handsfreepay payment log</h2>
 <hr />
+
 {#if data.logs && data.logs.length > 0}
 	{#each data.logs.map((log) => ({ ...log, time: new Date(log.time).toLocaleString() })) as log}
 		{#if log.level === 30}
