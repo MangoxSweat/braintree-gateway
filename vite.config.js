@@ -15,8 +15,6 @@ export default defineConfig({
 			}
 		}
 	},
-		}
-	},
 	optimizeDeps: {
 		exclude: ['mongodb'] // Prevent pre-bundling of mongodb
 	}
