@@ -1,5 +1,5 @@
 import { json, error } from '@sveltejs/kit'; // Note the missing `error` import here
-import { getLogs } from '$lib/mongo';
+import { getLogs } from '$lib/mongo.js';
 
 export async function GET() {
 	try {
