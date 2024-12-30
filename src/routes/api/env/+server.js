@@ -1,6 +1,5 @@
 import { json, error } from '@sveltejs/kit'; // Note the missing `error` import here
 import dotenv from 'dotenv';
-import fs from 'fs/promises';
 dotenv.config();
 
 export async function GET() {
