@@ -1,14 +1,12 @@
 import { json, error } from '@sveltejs/kit'; // Note the missing `error` import here
-import fs from 'fs/promises';
+import { getLogs } from '$lib/mongo';
 
 export async function GET() {
 	try {
-		// Read the log file
-		const logContent = await fs.readFile('./logs/app.log', 'utf-8'); // Ensure the path is correct relative to the server's working directory
-
-		return json({ logs: logContent }); // Send logs as a JSON response
+		const logs = await getLogs();
+		return json({ logs }); // Send logs as a JSON response
 	} catch (err) {
-		console.error('Error reading log file:', err.message);
-		throw error(500, 'Unable to fetch logs.'); // Proper error response for the API
+		console.error('Error fetching logs from MongoDB:', err.message);
+		throw error(500, 'Unable to fetch logs.');
 	}
 }

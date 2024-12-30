@@ -1,7 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
-	let paypalReady = false;
 
+	let { data } = $props();
+	let paypalReady = false;
 	let cardBillingAddressLine1 = '';
 	let cardBillingAddressLine2 = '';
 	let cardBillingAddressAdminAreaLine1 = '';
@@ -12,8 +13,6 @@
 	let cardFieldSubmitButton;
 	let amount = '10';
 	let username;
-
-	$: paypalReady && initPayPalButtons();
 
 	// Function to initialize PayPal buttons
 	function initPayPalButtons() {
@@ -150,6 +149,12 @@
 					// Clear input fields
 					document.getElementById('username').value = '';
 					document.getElementById('amount').value = '10';
+
+					// Clear card fields
+					cardField.NameField().clear();
+					cardField.NumberField().clear();
+					cardField.CVVField().clear();
+					cardField.ExpiryField().clear();
 				});
 		} catch (error) {
 			console.error('Error submitting card field:', error);
@@ -177,8 +182,9 @@
 						{
 							amount: {
 								currency_code: 'USD',
-								value: amount
-							}
+								username: username
+							},
+							custom_id: username
 						}
 					],
 					username: username,
@@ -211,7 +217,11 @@
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
-				}
+				},
+				body: JSON.stringify({
+					username: username,
+					amount: amount
+				})
 			});
 
 			const orderData = await response.json();
@@ -220,14 +230,18 @@
 			//   (2) Other non-recoverable errors -> Show a failure message
 			//   (3) Successful transaction -> Show confirmation or thank you message
 
+			const status = orderData?.jsonResponse?.status;
+			console.log('status', status);
 			const transaction =
-				orderData?.jsonResponse?.purchase_units?.[0]?.payments?.captures?.[0] ||
-				orderData?.jsonResponse?.purchase_units?.[0]?.payments?.authorizations?.[0];
+				orderData?.jsonResponse?.purchaseUnits?.[0]?.payments?.captures?.[0] ||
+				orderData?.jsonResponse?.purchaseUnits?.[0]?.payments?.authorizations?.[0];
+
 			const errorDetail = orderData?.details?.[0];
 
-			console.log('transaction: ', orderData);
+			console.log('orderData: ', orderData);
+			console.log('transaction: ', transaction);
 
-			if (errorDetail || !transaction || transaction.status === 'DECLINED') {
+			if (errorDetail || !transaction || status !== 'COMPLETED') {
 				// (2) Other non-recoverable errors -> Show a failure message
 				let errorMessage;
 				if (transaction) {
@@ -239,32 +253,14 @@
 					console.log('outcome 1');
 					errorMessage = JSON.stringify(orderData.body);
 				}
-
 				throw new Error(errorMessage);
 			} else {
 				console.log('outcome 3');
-				const updateBalance = await fetch('/api/igmorefollowers/updateBalance', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						username: username,
-						amount: amount,
-						transaction: transaction.id
-					})
-				});
-
-				const response = await updateBalance.json();
-				if (response.body.error) {
-					throw new Error(response.body.error);
-				}
 
 				resultMessage(
-					`Transaction ${transaction.status}: ${transaction.id}<br><br>${response.body.success}.`,
+					`Transaction ${transaction.status}: ${transaction.id}<br><br>New Balance: ${orderData.balance}.`,
 					'green'
 				);
-				console.log('Capture result', orderData.body, JSON.stringify(orderData.body, null, 2));
 			}
 		} catch (error) {
 			console.error(error);
@@ -285,12 +281,19 @@
 	onMount(() => {
 		console.log('onmount');
 		const script = document.createElement('script');
-		//script.src =		'https://www.sandbox.paypal.com/sdk/js?client-id=AdzwTEbAUluN_lm_NMdLozUJ5k6_TuURIOOuxsKDRX5bGC4EDsoTlmkrmXizRcot-x3PhlbKnZpjuLns&components=buttons,card-fields&enable-funding=venmo';
 
-		script.src =
-			'https://www.paypal.com/sdk/js?client-id=Adb7Xn3r_1RTRD9iUNMS92Ad3nuz1FmW-Gl0kBwLfkZCl29PeX64UcMqppn4t6nTKv1z_z18WeXiLLO0&components=buttons,card-fields&enable-funding=venmo';
+		if (data.env == 'Live') {
+			console.log('live');
+			script.src =
+				'https://www.paypal.com/sdk/js?client-id=Adb7Xn3r_1RTRD9iUNMS92Ad3nuz1FmW-Gl0kBwLfkZCl29PeX64UcMqppn4t6nTKv1z_z18WeXiLLO0&components=buttons,card-fields&enable-funding=venmo';
+		} else {
+			console.log('sandbox');
+			script.src =
+				'https://www.sandbox.paypal.com/sdk/js?client-id=AdzwTEbAUluN_lm_NMdLozUJ5k6_TuURIOOuxsKDRX5bGC4EDsoTlmkrmXizRcot-x3PhlbKnZpjuLns&components=buttons,card-fields&enable-funding=venmo';
+		}
+
 		script.setAttribute('data-sdk-integration-source', 'developer-studio');
-		script.onload = () => (paypalReady = true);
+		script.onload = () => initPayPalButtons();
 		document.head.appendChild(script);
 	});
 </script>
