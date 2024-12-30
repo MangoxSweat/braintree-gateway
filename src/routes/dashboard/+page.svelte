@@ -38,7 +38,7 @@
 			<pre
 				style="color: {getLogColor(
 					log.level
-				)}">{log.time} - {log.msg} - Transaction: {log.paypal_id}</pre>
+				)}">{log.time} - {log.msg} - Transaction: {log.paypal_id} - Amount: {log.amount} - Username: {log.username}</pre>
 		{/if}
 		{#if log.level === 40}
 			<pre
