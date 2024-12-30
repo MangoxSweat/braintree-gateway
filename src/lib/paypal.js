@@ -25,6 +25,7 @@ if (process.env.ENVIRONMENT === 'Live') {
 	clientId = sandboxId;
 	clientSecret = sandboxSecret;
 }
+console.log('clientid', clientId);
 
 if (!clientId || !clientSecret) {
 	throw new Error('PayPal client ID and secret must be set in environment variables');
