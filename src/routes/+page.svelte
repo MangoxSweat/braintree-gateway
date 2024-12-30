@@ -149,12 +149,6 @@
 					// Clear input fields
 					document.getElementById('username').value = '';
 					document.getElementById('amount').value = '10';
-
-					// Clear card fields
-					cardField.NameField().clear();
-					cardField.NumberField().clear();
-					cardField.CVVField().clear();
-					cardField.ExpiryField().clear();
 				});
 		} catch (error) {
 			console.error('Error submitting card field:', error);
