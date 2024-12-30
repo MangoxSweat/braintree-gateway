@@ -42,6 +42,8 @@
 		"dotenv": "^16.4.7",
 		"express": "^4.21.1",
 		"flatted": "^3.3.2",
-		"pino": "^9.6.0"
+		"mongodb": "^6.12.0",
+		"pino": "^9.6.0",
+		"pino-mongodb": "^4.3.0"
 	}
 }
