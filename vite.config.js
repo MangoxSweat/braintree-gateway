@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	ssr: {
-		noExternal: ['mongodb'] // Ensures mongodb is treated as an external dependency
+		external: ['mongodb'] // Ensures mongodb is treated as an external dependency
 	},
 	build: {
 		rollupOptions: {
