@@ -10,8 +10,10 @@ export const POST = async ({ request }) => {
 	try {
 		// Use the cart information passed from the front-end to calculate the order amount details
 		const { username, amount } = await request.json();
+		console.log('amount', amount);
 
 		const amountPlusFees = parseInt(amount) + 4;
+		console.log('real amount', amountPlusFees);
 
 		const { jsonResponse, httpStatusCode } = await createOrder(username, amountPlusFees.toString());
 		return json(jsonResponse, { status: httpStatusCode });
@@ -22,9 +24,10 @@ export const POST = async ({ request }) => {
 };
 
 async function verifyUser(username) {
+	console.log('verifying user');
 	try {
 		if (!username) {
-			console.error('No username provided');
+			console.log('No username provided');
 			throw new Error('No username provided');
 		}
 
@@ -40,6 +43,7 @@ async function verifyUser(username) {
 			throw new Error('User not found!');
 		}
 
+		console.log('username valid');
 		return true;
 	} catch (error) {
 		console.error('Error verifying user:', error);
@@ -52,6 +56,7 @@ async function verifyUser(username) {
  * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
  */
 const createOrder = async (username, amount) => {
+	console.log('create order');
 	const payload = {
 		body: {
 			intent: 'CAPTURE',
