@@ -26,6 +26,7 @@ export const POST = async ({ request }) => {
 async function verifyUser(username) {
 	console.log('verifying user');
 	try {
+		console.log('verify', username);
 		if (!username) {
 			console.log('No username provided');
 			throw new Error('No username provided');
