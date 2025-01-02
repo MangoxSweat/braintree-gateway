@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { expoIn } from 'svelte/easing';
 
 	let { data } = $props();
 	let paypalReady = false;
@@ -13,6 +14,11 @@
 	let cardFieldSubmitButton;
 	let amount = '10';
 	let username;
+
+	let nameField;
+	let numberField;
+	let cvvField;
+	let expiryField;
 
 	// Function to initialize PayPal buttons
 	function initPayPalButtons() {
@@ -41,6 +47,15 @@
 		cardField = window.paypal.CardFields({
 			createOrder: createOrderCallback,
 			onApprove: onApproveCallback,
+			inputEvents: {
+				onChange: (event) => {
+					console.log('Input submit request event data:', event);
+					if (event.isEmpty) {
+						console.log('cleared');
+					}
+				},
+				onInputSubmitRequest: (event) => {}
+			},
 			style: {
 				input: {
 					'font-size': '14px',
@@ -53,7 +68,7 @@
 		});
 
 		if (cardField.isEligible()) {
-			const nameField = cardField.NameField({
+			nameField = cardField.NameField({
 				style: {
 					input: {
 						color: 'dark blue',
@@ -66,7 +81,7 @@
 			});
 			nameField.render('#card-name-field-container');
 
-			const numberField = cardField.NumberField({
+			numberField = cardField.NumberField({
 				style: {
 					input: {
 						background: 'rgb(233, 242, 252)',
@@ -79,7 +94,7 @@
 			});
 			numberField.render('#card-number-field-container');
 
-			const cvvField = cardField.CVVField({
+			cvvField = cardField.CVVField({
 				style: {
 					input: {
 						background: 'rgb(233, 242, 252)',
@@ -92,7 +107,7 @@
 			});
 			cvvField.render('#card-cvv-field-container');
 
-			const expiryField = cardField.ExpiryField({
+			expiryField = cardField.ExpiryField({
 				style: {
 					input: {
 						background: 'rgb(233, 242, 252)',
@@ -154,6 +169,10 @@
 			console.error('Error submitting card field:', error);
 			// Handle error (e.g., show error message to the user)
 		} finally {
+			nameField.clear();
+			numberField.clear();
+			expiryField.clear();
+			cvvField.clear();
 			cardFieldSubmitButton.disabled = false; // Re-enable the button
 		}
 	};
@@ -321,13 +340,13 @@
 				<option value="100">$100</option>
 				<option value="200">$200</option>
 			</select>
-		</div>
-		<label style:width="100%">Payment Info</label>
-		<div id="card-name-field-container"></div>
-		<div id="card-number-field-container"></div>
-		<div id="card-expiry-field-container"></div>
-		<div id="card-cvv-field-container"></div>
-		<!--
+			<p style="color: red; font-size: 0.9em;">Note: A $4 fee will be added to the transaction.</p>
+			<label style:width="100%">Payment Info</label>
+			<div id="card-name-field-container"></div>
+			<div id="card-number-field-container"></div>
+			<div id="card-expiry-field-container"></div>
+			<div id="card-cvv-field-container"></div>
+			<!--
 		<div id="billing-address" style:margin-top="1em">
 			<label for="card-billing-address-line-1">Billing Address</label>
 			<input
@@ -390,19 +409,20 @@
 			/>
 		</div>
         -->
-		<br /><br />
-		<button
-			id="card-field-submit-button"
-			type="button"
-			on:click={submitCardField}
-			bind:this={cardFieldSubmitButton}
-		>
-			Pay</button
-		>
-	</div>
-	<p id="result-message"></p>
+			<br /><br />
+			<button
+				id="card-field-submit-button"
+				type="button"
+				on:click={submitCardField}
+				bind:this={cardFieldSubmitButton}
+			>
+				Pay</button
+			>
+		</div>
+		<p id="result-message"></p>
 
-	<div id="paypal-button-container" class="paypal-button-container"></div>
+		<div id="paypal-button-container" class="paypal-button-container"></div>
+	</div>
 </main>
 
 <style>
