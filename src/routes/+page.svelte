@@ -314,7 +314,7 @@
 <main>
 	<h1>Add Funds</h1>
 	<!-- Containers for Card Fields hosted by PayPal -->
-	<div id="card-form" class="card_container">
+	<div id="card-form" style:width="auto" class="card_container">
 		<div style:text-align="center">
 			<label for="username">Username</label>
 			<input

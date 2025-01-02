@@ -26,7 +26,6 @@ export const POST = async ({ request }) => {
 async function verifyUser(username) {
 	console.log('verifying user');
 	try {
-		console.log('verify', username);
 		if (!username) {
 			console.log('No username provided');
 			throw new Error('No username provided');
@@ -39,13 +38,18 @@ async function verifyUser(username) {
 
 		const response = await axios.get(url, { headers });
 
-		if (response.data.data.count == 0) {
-			console.error('User not found');
-			throw new Error('User not found!');
+		if (
+			response.data.data.list &&
+			response.data.data.list.some((user) => {
+				return user.username === username && user.status === 'Active';
+			})
+		) {
+			console.log('username valid');
+			return true;
+		} else {
+			console.error('User not valid!');
+			throw new Error('User not valid!');
 		}
-
-		console.log('username valid');
-		return true;
 	} catch (error) {
 		console.error('Error verifying user:', error);
 		throw new Error(error.message);
